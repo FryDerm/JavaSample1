@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  java_project:
+    container_name: java_project
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace:cached
+      - $HOME/.aws:/root/.aws
+      - $HOME/.zshrc:/root/.zshrc
+    ports:
+      - "8080:8080"
+    networks:
+      - ap_network
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment: 
+      NO_PROXY: "*"
+  
+networks:
+  ap_network:
+    name: ap_network
+    driver: bridge
